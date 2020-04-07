@@ -9,7 +9,7 @@ class Ffmpeg < Formula
 
   # This formula is for people that will compile with their chosen options
   bottle :unneeded
-
+  option "with-theora", "Enable theora support"
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
   option "with-decklink", "Enable DeckLink support"
   option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
@@ -33,7 +33,8 @@ class Ffmpeg < Formula
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
-
+  
+  depends_on "theora"
   depends_on "aom"
   depends_on "fontconfig"
   depends_on "freetype"
@@ -114,13 +115,14 @@ class Ffmpeg < Formula
       --enable-libass
       --disable-libjack
       --disable-indev=jack
+      --enable-theora
     ]
 
     if OS.mac?
       args << "--enable-opencl"
       args << "--enable-videotoolbox"
     end
-
+    args << "--with-theora" if build.with? "theora"
     args << "--disable-htmlpages" # doubtful anyone will look at this. The same info is accessible through the man pages.
     args << "--enable-chromaprint" if build.with? "chromaprint"
     args << "--enable-libbluray" if build.with? "libbluray"
